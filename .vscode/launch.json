@@ -7,7 +7,7 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Open Global_Inflation_2010.html",
+            "name": "Open index.html",
             "file": "c:\\Users\\shwet\\OneDrive\\Desktop\\MCS-DS\\CS416-Data Visualization\\Github\\narvisual.github.io\\Global_Inflation_2010.html"
         }
     ]
