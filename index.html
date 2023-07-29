@@ -2,8 +2,8 @@
 <html>
 <head>
  <title>Narrative Visualization</title>
- <script src="http://d3js.org/d3.v5.min.js" charset="utf-8"></script>
-<!-- Create a div where the graph will take place -->
+ <script type="text/javascript" src="./d3/d3.v3.js"></script>
+ <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 </head>
 <body>
@@ -15,7 +15,7 @@
             height = 400 - margin.top - margin.bottom;
         
         
-                  d3.csv('https://github.com/asharda1982/narvisual.github.io/blob/main/data.csv').then(function(data) {
+d3.csv('data.csv').then(function(data) {
     // Data is now loaded and accessible here
     console.log(data);
     // You can perform further operations with the data here
