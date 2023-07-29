@@ -2,55 +2,70 @@
 <html>
 <head>
  <title>Narrative Visualization</title>
- <script src = "https://d3js.org/d3.v4.min.js"></script> <!-- Create a div where the graph will take place -->
-<div id="my_dataviz"></div>
+ <script src="https://d3js.org/d3.v6.min.js"></script>
+ <style> /* set the CSS */
+
+  .bar { fill: steelblue; }
+  
+  </style>
+ <div id="my_dataviz"></div>
 </head>
 <body>
-    <script>
+    
+<script>
 
-        // set the dimensions and margins of the graph
-        var margin = {top: 10, right: 30, bottom: 30, left: 60},
-            width = 460 - margin.left - margin.right,
-            height = 400 - margin.top - margin.bottom;
+    // set the dimensions and margins of the graph
+    var margin = {top: 30, right: 40, bottom: 100, left: 50},
+    width = 1000 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-                    // append the svg object to the body of the page
-        var svg = d3.select("#my_dataviz")
-          .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-            .attr("transform",
-                  "translate(" + margin.left + "," + margin.top + ")");
-        
-            d3.csv("https://gist.githubusercontent.com/asharda1982/56164c9926e7ce79979ca24231d39ed7/raw/a0d285f453154fc9abb7c378a40b82f3a58fd9b8/data.csv", function(data) {
-
-// Add X axis
-var x = d3.scaleLinear()
-  .domain([0, 4000])
-  .range([ 0, width ]);
-svg.append("g")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(x));
-
-// Add Y axis
+    var x = d3.scaleBand()
+          .range([0, width])
+          .padding(0.4);
 var y = d3.scaleLinear()
-  .domain([0, 500000])
-  .range([ height, 0]);
-svg.append("g")
-  .call(d3.axisLeft(y));
+          .range([height, 0]);
 
-// Add dots
-svg.append('g')
-  .selectAll("dot")
-  .data(data)
-  .enter()
-  .append("circle")
-    .attr("cx", function (d) { return x(d.Country); } )
-    .attr("cy", function (d) { return y(d[2010]); } )
-    .attr("r", 1.5)
-    .style("fill", "#69b3a2")
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")")
+  
+// Get data
+d3.csv("https://gist.githubusercontent.com/asharda1982/83de4a69f34b218a63988f9837640cb7/raw/36bb7a854a961534f83a346ecb36761d327a8788/data2.csv").then(function(data) {
 
-})
+
+
+// Scale the range of the data in the domains
+x.domain(data.map(function(d) { return d["Country"]; }));
+y.domain([0, 100]);
+
+
+ // Append rectangles for bar chart
+ svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d["Country"]); })
+      .attr("width", 0.3)
+      .attr("y", function(d) { return y(d["2010"]); })
+      .attr("height", function(d) { return height - y(d["2010"]); });
+
+  // Add x axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x)).selectAll("text")  
+     .style("text-anchor", "end")
+     .attr("dx", "-.8em")
+     .attr("dy", ".15em")
+     .attr("transform", "rotate(-65)").style("font", "5px times");
+
+  // Add y axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+});
 
 </script>
 </body>
